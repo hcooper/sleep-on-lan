@@ -6,12 +6,11 @@ Wake-on-LAN uses port 9 (discard) by default. This service listens on port 10.
 
 ## Security Considerations
 
-The daemon validates that incoming WoL packets contain a MAC address matching one of the local network interfaces. This prevents arbitrary packets from triggering system suspend.
+**⚠ Security Warning**: This daemon has no authentication. Any device on your network that can send UDP packets to the listening port can trigger system suspend.
 
 Additional recommendations:
 - Use firewall rules to restrict access to trusted IP addresses
 - Only deploy on trusted networks
-- Monitor daemon logs for suspicious activity
 
 
 ## Overview
