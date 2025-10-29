@@ -6,11 +6,12 @@ Wake-on-LAN uses port 9 (discard) by default. This service listens on port 10.
 
 ## Security Considerations
 
-**Warning**: This daemon has no authentication. Any device on your network that can send UDP packets to the listening port can trigger system suspend.
+The daemon validates that incoming WoL packets contain a MAC address matching one of the local network interfaces. This prevents arbitrary packets from triggering system suspend.
 
-Recommendations:
+Additional recommendations:
 - Use firewall rules to restrict access to trusted IP addresses
 - Only deploy on trusted networks
+- Monitor daemon logs for suspicious activity
 
 
 ## Overview
@@ -23,6 +24,8 @@ Uses the standard Wake-on-LAN packet format:
 - 6 bytes: `0xFF` (magic packet header)
 - 96 bytes: Target MAC address repeated 16 times
 - Total: 102 bytes
+
+**Important**: The MAC address in the packet must match one of the local network interface MAC addresses on the machine running the daemon. Packets with non-matching MAC addresses will be rejected.
 
 ## Usage
 
@@ -60,7 +63,7 @@ wakeonlan -i <target_ip> -p 10 AA:BB:CC:DD:EE:FF
 sudo etherwake -i eth0 AA:BB:CC:DD:EE:FF
 ```
 
-Replace `AA:BB:CC:DD:EE:FF` with the MAC address of the target machine.
+Replace `AA:BB:CC:DD:EE:FF` with the actual MAC address of the target machine's network interface. The daemon will display all monitored MAC addresses when it starts.
 
 ## Installation
 
